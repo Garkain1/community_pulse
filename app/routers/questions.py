@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.models import db, Question
+from app.models import db, Question, Category
 from app.schemas.question import QuestionCreate, QuestionResponse
 from pydantic import ValidationError
 
@@ -20,7 +20,11 @@ def create_question():
     except ValidationError as e:
         return jsonify(e.errors()), 400
 
-    question = Question(text=data.text)
+    category = Category.query.get(data.category_id)
+    if not category:
+        return jsonify({"message": "Category not found"}), 404
+
+    question = Question(text=data.text, category_id=data.category_id)
     db.session.add(question)
     db.session.commit()
 
@@ -42,6 +46,7 @@ def update_question(id):
 
     question = Question.query.get_or_404(id)
     question.text = data.text
+    question.category_id = data.category_id
     db.session.commit()
 
     return jsonify(QuestionResponse.from_orm(question).dict())

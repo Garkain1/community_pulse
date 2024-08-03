@@ -6,6 +6,13 @@ from pydantic import ValidationError
 response_bp = Blueprint('response', __name__, url_prefix='/responses')
 
 
+@response_bp.route('/', methods=['GET'])
+def get_responses():
+    responses = Response.query.all()
+    results = [ResponseModel.from_orm(response).dict() for response in responses]
+    return jsonify(results), 200
+
+
 @response_bp.route('/', methods=['POST'])
 def add_response():
     try:
