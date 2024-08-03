@@ -1,6 +1,3 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-
-from app.models.questions import *
-from app.models.response import *
+from app.models.db import db
+from app.models.questions import Question
+from app.models.response import Response
