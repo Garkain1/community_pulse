@@ -1,19 +1,24 @@
-from flask import Blueprint, request
-from app.models import db, Response
+from flask import Blueprint, request, jsonify
+from app.models import db, Response, Question
+from app.schemas.response import ResponseCreate, ResponseModel
+from pydantic import ValidationError
 
 response_bp = Blueprint('response', __name__, url_prefix='/responses')
 
 
-@response_bp.route('/', methods=['GET'])
-def get_responses():
-    responses = Response.query.all()
-    return {"responses": [str(response) for response in responses]}
-
-
 @response_bp.route('/', methods=['POST'])
 def add_response():
-    data = request.json
-    new_response = Response(question_id=data['question_id'], is_agree=data['is_agree'])
-    db.session.add(new_response)
+    try:
+        data = ResponseCreate(**request.get_json())
+    except ValidationError as e:
+        return jsonify(e.errors()), 400
+
+    question = Question.query.get(data.question_id)
+    if not question:
+        return jsonify({"message": "Question not found"}), 404
+
+    response = Response(question_id=question.id, is_agree=data.is_agree)
+    db.session.add(response)
     db.session.commit()
-    return {"message": "Response added"}, 201
+
+    return jsonify(ResponseModel.from_orm(response).dict()), 201

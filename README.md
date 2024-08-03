@@ -8,8 +8,13 @@ community_pulse/
 |   |   └-- response.py
 |   |-- models/
 |   |   |-- __init__.py
+|   |   |-- db.py
 |   |   |-- questions.py
 |   |   └-- response.py
+|   |-- schemas/
+|       |-- __init__.py
+|       |-- question.py
+|       └-- response.py
 |-- config.py
 |-- run.py
 |-- requirements.txt
