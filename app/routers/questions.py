@@ -45,6 +45,11 @@ def update_question(id):
         return jsonify(e.errors()), 400
 
     question = Question.query.get_or_404(id)
+
+    category = Category.query.get(data.category_id)
+    if not category:
+        return jsonify({"message": "Category not found"}), 404
+
     question.text = data.text
     question.category_id = data.category_id
     db.session.commit()

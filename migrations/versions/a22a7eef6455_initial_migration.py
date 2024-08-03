@@ -1,8 +1,8 @@
-"""Add categories and update questions with category
+"""Initial migration
 
-Revision ID: e7fbb8267ba9
+Revision ID: a22a7eef6455
 Revises: 
-Create Date: 2024-08-03 06:46:00.945293
+Create Date: 2024-08-03 08:26:49.028188
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e7fbb8267ba9'
+revision = 'a22a7eef6455'
 down_revision = None
 branch_labels = None
 depends_on = None
